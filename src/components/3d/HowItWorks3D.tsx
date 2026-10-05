@@ -178,11 +178,40 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
           step0Group.rotation.y = elapsed * 0.4;
           step0Group.position.y = Math.sin(elapsed * 1.5) * 0.08;
         } else if (stepIndex === 1) {
-          step1Group.rotation.y = elapsed * 0.35;
-          // Float books slightly
+          // Continuous 3D Book Stacking Cycle (4 second loop)
+          const stackCycle = elapsed % 4.0;
+          step1Group.rotation.y = elapsed * 0.3;
+
           bookMeshes.forEach((b, i) => {
-            b.position.y = -0.5 + i * 0.16 + Math.sin(elapsed * 2 + i) * 0.02;
+            // Target stacked position
+            const finalY = -0.5 + i * 0.16;
+            // Delay per book
+            const startDelay = i * 0.35;
+            const flyTime = Math.max(0, Math.min(1, (stackCycle - startDelay) / 0.6));
+            // Smooth ease out bounce
+            const easeY = 1 - Math.pow(1 - flyTime, 3);
+            
+            if (stackCycle < 2.8) {
+              // Stacking in phase
+              b.position.y = THREE.MathUtils.lerp(finalY + 1.2, finalY, easeY);
+              b.position.x = THREE.MathUtils.lerp((i % 2 === 0 ? 0.8 : -0.8), 0, easeY);
+              b.rotation.y = ((i % 2) - 0.5) * 0.08 + THREE.MathUtils.lerp(0.3, 0, easeY);
+            } else {
+              // Floating ambient stack phase
+              const floatOffset = Math.sin(elapsed * 2.5 + i * 0.5) * 0.03;
+              b.position.y = finalY + floatOffset;
+              b.position.x = 0;
+            }
           });
+
+          // Ribbon expands and binds when stack completes
+          if (stackCycle > 2.0) {
+            const ribbonPop = Math.min(1, (stackCycle - 2.0) / 0.5);
+            ribbon.scale.setScalar(THREE.MathUtils.lerp(0.1, 1.0, ribbonPop));
+            ribbon.position.y = -0.15 + Math.sin(elapsed * 2.5) * 0.03;
+          } else {
+            ribbon.scale.setScalar(0.001);
+          }
         } else if (stepIndex === 2) {
           step2Group.rotation.y = elapsed * 0.45;
           step2Group.position.y = Math.sin(elapsed * 2) * 0.1;
