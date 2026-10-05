@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles, Play } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles, Repeat, Pause, Play } from 'lucide-react';
 import { SAMPLE_ORDERS } from '../data/ordersData';
 import { OrderTrackingInfo } from '../types';
 
@@ -15,7 +15,7 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
   const [isSearching, setIsSearching] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
-  // Status mapping to step index
+  // Status mapping to step index (0: Placed, 1: Preparing, 2: Ready, 3: Dispatched/Out for Delivery, 4: Delivered)
   const statusMap: Record<string, number> = {
     placed: 0,
     preparing: 1,
@@ -24,43 +24,56 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
     delivered: 4,
   };
 
-  const targetStepIdx = currentOrder ? (statusMap[currentOrder.currentStatus] ?? 0) : 0;
+  const targetStepIdx = currentOrder ? (statusMap[currentOrder.currentStatus] ?? 3) : 3;
+  // Maximum step for the 4-section flow (indices 0, 1, 2, 3)
+  const maxLoopStep = Math.min(targetStepIdx, 3);
+
   const [animatedStepIdx, setAnimatedStepIdx] = useState(0);
-  const [animatedProgress, setAnimatedProgress] = useState(0);
-  const [isReplaying, setIsReplaying] = useState(false);
+  const [isAutoLoop, setIsAutoLoop] = useState(true);
+  const loopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Trigger smooth step-by-step flow animation
-  const runFlowAnimation = (targetIdx: number) => {
-    setIsReplaying(true);
-    setAnimatedStepIdx(0);
-    setAnimatedProgress(0);
-
-    let step = 0;
-    const intervalTime = 600; // ms per step transition
-
-    const timer = setInterval(() => {
-      if (step < targetIdx) {
-        step += 1;
-        setAnimatedStepIdx(step);
-        // Step progress calculation (0 to 100%)
-        const targetPercent = (step / 4) * 100;
-        setAnimatedProgress(targetPercent);
-      } else {
-        clearInterval(timer);
-        setIsReplaying(false);
-      }
-    }, intervalTime);
-
-    return () => clearInterval(timer);
-  };
-
-  // Run on mount or when current order changes
+  // Continuous looping animation through the 4 sections (Step 0 -> 1 -> 2 -> 3)
   useEffect(() => {
-    if (currentOrder) {
-      const cleanup = runFlowAnimation(targetStepIdx);
-      return cleanup;
-    }
-  }, [currentOrder?.orderId, targetStepIdx]);
+    if (!isAutoLoop) return;
+
+    let isMounted = true;
+    let currentStep = 0;
+
+    const stepInterval = 850; // ms per step transition
+    const holdAtEndDuration = 2400; // ms to pause at 4th section (Out for Delivery) before restarting
+
+    const runStep = () => {
+      if (!isMounted) return;
+
+      setAnimatedStepIdx(currentStep);
+
+      if (currentStep < maxLoopStep) {
+        currentStep += 1;
+        loopTimeoutRef.current = setTimeout(runStep, stepInterval);
+      } else {
+        // Hold at 4th section (Out for Delivery), then loop back to first step
+        loopTimeoutRef.current = setTimeout(() => {
+          if (!isMounted) return;
+          currentStep = 0;
+          setAnimatedStepIdx(0);
+          loopTimeoutRef.current = setTimeout(runStep, 400);
+        }, holdAtEndDuration);
+      }
+    };
+
+    runStep();
+
+    return () => {
+      isMounted = false;
+      if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
+    };
+  }, [isAutoLoop, currentOrder?.orderId, maxLoopStep]);
+
+  const handleManualReplay = () => {
+    if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
+    setIsAutoLoop(true);
+    setAnimatedStepIdx(0);
+  };
 
   const handleTrackSubmit = (e?: React.FormEvent, customId?: string) => {
     if (e) e.preventDefault();
@@ -87,6 +100,11 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
   };
 
   const sampleOrderIds = ['VG-84920', 'VG-92841', 'VG-77402', 'VG-61093'];
+
+  // Calculate percentage width for line and position of courier badge (10% to 90% across 5 nodes)
+  // Node centers are located at: 10% (0), 30% (1), 50% (2), 70% (3), 90% (4)
+  const lineFillWidth = `${animatedStepIdx * 20}%`;
+  const courierLeftPos = `calc(10% + ${animatedStepIdx * 20}%)`;
 
   return (
     <section id="track-order" className="py-20 bg-slate-50 border-y border-slate-200">
@@ -190,16 +208,32 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
               </div>
 
               <div className="flex flex-col md:items-end gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Auto-Loop Toggle */}
                   <button
-                    onClick={() => runFlowAnimation(targetStepIdx)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-950 border border-blue-400/40 text-blue-300 hover:bg-blue-900 hover:text-white transition-all shadow-xs active:scale-95"
-                    title="Replay step-by-step dispatch flow"
+                    onClick={() => setIsAutoLoop((prev) => !prev)}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all shadow-xs active:scale-95 ${
+                      isAutoLoop
+                        ? 'bg-blue-600/90 border-blue-400 text-white shadow-blue-500/30 ring-2 ring-blue-400/30'
+                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                    }`}
+                    title="Toggle continuous 4-step loop animation"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${isReplaying ? 'animate-spin' : ''}`} />
-                    <span>Replay Journey</span>
+                    <Repeat className={`w-3.5 h-3.5 ${isAutoLoop ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
+                    <span>{isAutoLoop ? 'Looping 4 Steps' : 'Loop Paused'}</span>
                   </button>
 
+                  {/* Replay Flow */}
+                  <button
+                    onClick={handleManualReplay}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-200 hover:bg-blue-900 hover:text-white transition-all shadow-xs active:scale-95"
+                    title="Replay 4-step dispatch flow from beginning"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Replay</span>
+                  </button>
+
+                  {/* Status Badge */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950 border border-emerald-500/40 text-emerald-400">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                     <span className="capitalize">{currentOrder.currentStatus}</span>
@@ -217,19 +251,19 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
               {/* Progress Line Bar (Desktop Horizontal) */}
               <div className="relative mb-6">
                 
-                {/* 1. Base Grey Track Line connecting all node centers */}
+                {/* 1. Base Grey Track Line connecting all node centers (from 10% to 90%) */}
                 <div className="hidden md:block absolute top-5 left-[10%] right-[10%] h-1.5 bg-slate-200 rounded-full z-0" />
                 
-                {/* 2. Animated Flow Line - Dynamic Gradient with glowing beam */}
+                {/* 2. Animated Flow Line - Dynamic Gradient connecting from step 0 to active step */}
                 <div
                   className="hidden md:block absolute top-5 left-[10%] h-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 rounded-full z-0 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(37,99,235,0.45)]"
-                  style={{ width: `${(animatedProgress * 0.8)}%` }}
+                  style={{ width: lineFillWidth }}
                 />
 
-                {/* 3. Traveling Package Courier Icon that glides along the line */}
+                {/* 3. Traveling Package Courier Icon that glides along the 4 steps in a loop */}
                 <div
                   className="hidden md:flex absolute top-1 items-center justify-center z-30 transition-all duration-700 ease-out -translate-x-1/2 pointer-events-none"
-                  style={{ left: `calc(10% + ${(animatedProgress * 0.8)}%)` }}
+                  style={{ left: courierLeftPos }}
                 >
                   <div className="relative flex items-center justify-center">
                     {/* Pulsing radar ring */}
@@ -242,12 +276,12 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                   </div>
                 </div>
 
-                {/* 4. Milestone Nodes (5 steps) */}
+                {/* 4. Milestone Nodes (5 steps total, looping through the 4 active sections) */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-0 relative z-10">
                   {currentOrder.timeline.map((step, idx) => {
                     const isStepReached = idx <= animatedStepIdx;
-                    const isStepCompleted = idx < animatedStepIdx || (idx <= animatedStepIdx && (step.completed || idx < targetStepIdx));
-                    const isStepActive = idx === animatedStepIdx && (step.active || idx === targetStepIdx);
+                    const isStepCompleted = idx < animatedStepIdx;
+                    const isStepActive = idx === animatedStepIdx;
 
                     return (
                       <div
@@ -256,13 +290,14 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                           isStepReached ? 'opacity-100' : 'opacity-60 hover:opacity-90'
                         }`}
                         onClick={() => {
+                          if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
+                          setIsAutoLoop(false);
                           setAnimatedStepIdx(idx);
-                          setAnimatedProgress((idx / 4) * 100);
                         }}
                       >
                         {/* Milestone Circle */}
                         <div className="relative flex items-center justify-center">
-                          {/* Active Blue Halo for currently active step */}
+                          {/* Active Blue Halo when reached in the loop */}
                           {isStepActive && (
                             <div className="absolute -inset-2 rounded-full bg-blue-500/20 animate-pulse pointer-events-none" />
                           )}
@@ -272,11 +307,13 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                               isStepCompleted
                                 ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/30 scale-100'
                                 : isStepActive
-                                ? 'bg-blue-600 text-white ring-8 ring-blue-100/90 shadow-blue-600/40 scale-110'
+                                ? idx === 3
+                                  ? 'bg-blue-600 text-white ring-8 ring-blue-100/90 shadow-blue-600/40 scale-110'
+                                  : 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/30 scale-105'
                                 : 'bg-white border-2 border-slate-300 text-slate-400'
                             } ${isStepReached ? 'animate-pop-bounce' : ''}`}
                           >
-                            {isStepCompleted ? (
+                            {isStepCompleted || (isStepActive && idx < 3) ? (
                               <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
                             ) : (
                               <span>0{idx + 1}</span>
@@ -289,7 +326,7 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                           <p
                             className={`text-xs font-bold leading-tight transition-colors ${
                               isStepActive
-                                ? 'text-blue-700 font-extrabold'
+                                ? idx === 3 ? 'text-blue-700 font-extrabold' : 'text-emerald-700 font-bold'
                                 : isStepCompleted
                                 ? 'text-slate-900'
                                 : 'text-slate-400'
