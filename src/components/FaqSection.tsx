@@ -49,37 +49,31 @@ export const FaqSection: React.FC = () => {
         </div>
 
         {/* FAQ Accordion */}
-        <div className="space-y-3.5">
+        <div className="space-y-3">
           {faqs.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
               <div
                 key={idx}
-                className={`border rounded-2xl overflow-hidden transition-all duration-200 bg-white group ${
-                  isOpen
-                    ? 'border-blue-500 shadow-md shadow-blue-900/5 ring-2 ring-blue-500/10'
-                    : 'border-slate-200 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5'
-                }`}
+                className="border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 transition-colors"
+                  className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
                 >
-                  <span className={`font-bold text-sm sm:text-base transition-colors ${
-                    isOpen ? 'text-blue-700' : 'text-slate-900 group-hover:text-blue-900'
-                  }`}>
+                  <span className="font-bold text-slate-900 text-sm sm:text-base">
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 shrink-0 transition-all duration-300 ${
-                      isOpen ? 'rotate-180 text-blue-700 scale-110' : 'text-slate-400 group-hover:text-blue-600 group-hover:scale-110'
+                    className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${
+                      isOpen ? 'rotate-180 text-blue-700' : ''
                     }`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 bg-slate-50/40">
+                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                     {faq.a}
                   </div>
                 )}

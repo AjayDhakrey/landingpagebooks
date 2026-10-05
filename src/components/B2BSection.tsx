@@ -128,10 +128,10 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
           <div className="shrink-0">
             <button
               onClick={onRequestDemo}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all duration-200 group"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-98"
             >
               <span>Request Institutional Demo</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -153,9 +153,9 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-xl whitespace-nowrap transition-all duration-200 flex items-center gap-2 hover:scale-105 active:scale-95 ${
+              className={`px-4 py-2.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-2 ${
                 activeTab === tab.id
-                  ? 'bg-blue-700 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-500/30'
+                  ? 'bg-blue-700 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -180,7 +180,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
             {/* Metrics */}
             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800">
               {currentTab.metrics.map((metric, i) => (
-                <div key={i} className="space-y-1 p-2 rounded-xl hover:bg-slate-800/50 transition-colors duration-200 hover:scale-105">
+                <div key={i} className="space-y-1">
                   <p className="text-2xl sm:text-3xl font-black text-white font-mono tabular-nums">
                     {metric.value}
                   </p>
@@ -194,17 +194,17 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
             <div className="pt-2">
               <button
                 onClick={onRequestDemo}
-                className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 transition-all duration-200 hover:translate-x-1 group"
+                className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 transition-colors"
               >
                 <span>Learn how Vanguard deploys in 48 hours</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
           {/* Interactive B2B Dashboard Console Simulator */}
           <div className="lg:col-span-6">
-            <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-5 sm:p-6 shadow-2xl backdrop-blur-xs space-y-4 hover:border-slate-600 hover:shadow-blue-900/20 transition-all duration-300">
+            <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-5 sm:p-6 shadow-2xl backdrop-blur-xs space-y-4">
               
               {/* Console Header Bar */}
               <div className="flex items-center justify-between border-b border-slate-700/80 pb-3">
@@ -220,7 +220,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
                 </div>
                 
                 <span className="text-[11px] font-mono text-emerald-400 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Synced
                 </span>
               </div>
@@ -237,13 +237,13 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
                 {currentTab.previewItems.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between text-xs transition-all duration-200 hover:border-blue-500/40 hover:bg-slate-900 hover:translate-x-1 group"
+                    className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between text-xs transition-colors hover:border-slate-700"
                   >
                     <div>
-                      <p className="font-semibold text-white group-hover:text-blue-300 transition-colors">{item.label}</p>
+                      <p className="font-semibold text-white">{item.label}</p>
                       <p className="text-[11px] text-slate-400 mt-0.5">{item.projected}</p>
                     </div>
-                    <span className="font-mono text-xs font-bold text-blue-400 bg-blue-950/70 border border-blue-800 px-2.5 py-1 rounded-md tabular-nums group-hover:bg-blue-900 group-hover:text-white transition-colors">
+                    <span className="font-mono text-xs font-bold text-blue-400 bg-blue-950/70 border border-blue-800 px-2.5 py-1 rounded-md tabular-nums">
                       {item.ordered}
                     </span>
                   </div>
@@ -251,7 +251,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
               </div>
 
               {/* Console Footer Stats */}
-              <div className="p-3 bg-blue-950/40 rounded-xl border border-blue-900/50 flex items-center justify-between text-xs text-blue-200 hover:bg-blue-950/60 transition-colors">
+              <div className="p-3 bg-blue-950/40 rounded-xl border border-blue-900/50 flex items-center justify-between text-xs text-blue-200">
                 <span>Integrated with DPS, St. Xavier&rsquo;s &amp; 450+ Partner Trusts</span>
                 <span className="font-semibold text-white">ISO 27001 Certified</span>
               </div>
@@ -263,33 +263,33 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
 
         {/* 4 Pillar Grid for B2B */}
         <div className="mt-20 pt-16 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="group p-5 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-blue-500/40 hover:bg-slate-800/80 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 space-y-2 cursor-default">
-            <Warehouse className="w-5 h-5 text-blue-400 group-hover:scale-125 group-hover:rotate-6 transition-transform duration-300" />
-            <h4 className="font-bold text-white text-base group-hover:text-blue-300 transition-colors">Multi-Campus Inventory</h4>
+          <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2">
+            <Warehouse className="w-5 h-5 text-blue-400" />
+            <h4 className="font-bold text-white text-base">Multi-Campus Inventory</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               Real-time synchronization across branch campuses, regional warehouses, and school bookstores.
             </p>
           </div>
 
-          <div className="group p-5 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-emerald-500/40 hover:bg-slate-800/80 hover:-translate-y-2 hover:shadow-xl hover:shadow-emerald-900/20 transition-all duration-300 space-y-2 cursor-default">
-            <ScanLine className="w-5 h-5 text-emerald-400 group-hover:scale-125 group-hover:rotate-6 transition-transform duration-300" />
-            <h4 className="font-bold text-white text-base group-hover:text-emerald-300 transition-colors">Barcode Verification</h4>
+          <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2">
+            <ScanLine className="w-5 h-5 text-emerald-400" />
+            <h4 className="font-bold text-white text-base">Barcode Verification</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               Zero packaging errors. Every bundle requires a complete ISBN scan before sealing tape application.
             </p>
           </div>
 
-          <div className="group p-5 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-purple-500/40 hover:bg-slate-800/80 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-900/20 transition-all duration-300 space-y-2 cursor-default">
-            <FileSpreadsheet className="w-5 h-5 text-purple-400 group-hover:scale-125 group-hover:rotate-6 transition-transform duration-300" />
-            <h4 className="font-bold text-white text-base group-hover:text-purple-300 transition-colors">Publisher EDI Orders</h4>
+          <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2">
+            <FileSpreadsheet className="w-5 h-5 text-purple-400" />
+            <h4 className="font-bold text-white text-base">Publisher EDI Orders</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               Direct automated purchase orders dispatched to NCERT, Oxford, Cambridge, and Selina without emails.
             </p>
           </div>
 
-          <div className="group p-5 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-amber-500/40 hover:bg-slate-800/80 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-900/20 transition-all duration-300 space-y-2 cursor-default">
-            <BadgeDollarSign className="w-5 h-5 text-amber-400 group-hover:scale-125 group-hover:rotate-6 transition-transform duration-300" />
-            <h4 className="font-bold text-white text-base group-hover:text-amber-300 transition-colors">Instant Escrow Payouts</h4>
+          <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2">
+            <BadgeDollarSign className="w-5 h-5 text-amber-400" />
+            <h4 className="font-bold text-white text-base">Instant Escrow Payouts</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               Automated payment disbursements to publishers and schools upon verified delivery confirmation.
             </p>

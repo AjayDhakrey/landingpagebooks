@@ -78,10 +78,10 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
                   key={city}
                   type="button"
                   onClick={() => setCityFilter(city)}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap hover:scale-105 active:scale-95 ${
+                  className={`px-3 py-1.5 rounded-lg font-medium transition-colors whitespace-nowrap ${
                     cityFilter === city
                       ? 'bg-blue-700 text-white shadow-sm'
-                      : 'bg-white text-slate-600 hover:bg-blue-50 hover:text-blue-700 border border-slate-200/80 hover:border-blue-300'
+                      : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80'
                   }`}
                 >
                   {city}
@@ -99,10 +99,10 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
                 key={board}
                 type="button"
                 onClick={() => setBoardFilter(board)}
-                className={`px-3 py-1 rounded-md font-medium transition-all duration-200 whitespace-nowrap hover:scale-105 active:scale-95 ${
+                className={`px-3 py-1 rounded-md font-medium transition-colors whitespace-nowrap ${
                   boardFilter === board
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60 hover:border-slate-400'
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200/60'
                 }`}
               >
                 {board}
@@ -114,7 +114,7 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
         {/* Schools Grid */}
         {filteredSchools.length === 0 ? (
           <div className="text-center py-16 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-            <GraduationCap className="w-10 h-10 text-slate-400 mx-auto mb-3 animate-bounce" />
+            <GraduationCap className="w-10 h-10 text-slate-400 mx-auto mb-3" />
             <p className="text-sm font-semibold text-slate-700">No partner schools matched your search criteria</p>
             <p className="text-xs text-slate-500 mt-1">Try clearing filters or search for another city.</p>
             <button
@@ -123,7 +123,7 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
                 setCityFilter('All');
                 setSearchQuery('');
               }}
-              className="mt-4 text-xs font-semibold text-blue-700 hover:underline hover:scale-105 transition-transform"
+              className="mt-4 text-xs font-semibold text-blue-700 hover:underline"
             >
               Reset All Filters
             </button>
@@ -137,21 +137,20 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
               return (
                 <div
                   key={school.id}
-                  onClick={() => onSelectSchool(school)}
-                  className="group bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-900/15 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between p-5 relative overflow-hidden cursor-pointer"
+                  className="group bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-blue-400 hover:shadow-xl hover:shadow-blue-900/10 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between p-5 relative overflow-hidden"
                 >
                   {/* Subtle top ambient glow on hover */}
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/0 rounded-full blur-2xl group-hover:bg-blue-500/15 transition-all duration-500 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors pointer-events-none" />
 
                   <div className="space-y-3.5 relative z-10">
                     
                     {/* Top Row: School Crest monogram & Verification */}
                     <div className="flex items-start justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/60 border border-blue-200/60 text-blue-800 font-extrabold flex items-center justify-center text-xs tracking-wider shadow-xs group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:border-blue-300 transition-all duration-300">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/60 border border-blue-200/60 text-blue-800 font-extrabold flex items-center justify-center text-xs tracking-wider shadow-xs group-hover:scale-105 group-hover:shadow-md group-hover:border-blue-300 transition-all duration-300">
                         {school.code.split('-')[0]}
                       </div>
                       
-                      <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50/80 px-2.5 py-0.5 rounded-full border border-emerald-200/60 group-hover:bg-emerald-100 transition-colors">
+                      <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50/80 px-2 py-0.5 rounded-full border border-emerald-200/60">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Verified 26–27</span>
                       </div>
@@ -191,7 +190,7 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
                     </div>
 
                     {/* Floating micro book stack indicator that reveals on hover */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 pt-1 flex items-center gap-1.5 text-[11px] text-blue-700 font-semibold group-hover:translate-x-1">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-1 flex items-center gap-1.5 text-[11px] text-blue-700 font-semibold">
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>{Object.keys(school.booklists).length * 6}+ Curriculums Loaded</span>
                     </div>
@@ -201,15 +200,12 @@ export const PartnerSchools: React.FC<PartnerSchoolsProps> = ({ onSelectSchool }
                   {/* Action Button with Enhanced Hover State */}
                   <div className="pt-4 mt-3 border-t border-slate-100 relative z-10">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectSchool(school);
-                      }}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 group-hover:bg-gradient-to-r group-hover:from-blue-700 group-hover:to-blue-600 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs group-hover:shadow-lg group-hover:shadow-blue-700/25 group-hover:scale-[1.02] transition-all duration-300 active:scale-98"
+                      onClick={() => onSelectSchool(school)}
+                      className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 group-hover:bg-gradient-to-r group-hover:from-blue-700 group-hover:to-blue-600 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs group-hover:shadow-md group-hover:shadow-blue-700/20 transition-all duration-300 active:scale-98"
                     >
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>View Official Booklist</span>
-                      <ChevronRight className="w-3.5 h-3.5 ml-auto group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-3.5 h-3.5 ml-auto group-hover:translate-x-0.5 transition-transform" />
                     </button>
                   </div>
                 </div>
