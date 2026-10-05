@@ -18,7 +18,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onStartOrder }) => {
       title: 'Select School & Grade',
       shortTitle: 'Select School',
       description:
-        'Search your institution by name, city, or unique school code. Vanguard loads the verified syllabus signed off by your school administration.',
+        'Search your institution by name, city, or unique school code. Bookstore loads the verified syllabus signed off by your school administration.',
       details: [
         'Over 450+ CBSE, ICSE, Cambridge & IB schools registered',
         'Official academic edition lock — no outdated reprints',
@@ -90,12 +90,9 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onStartOrder }) => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-blue-700 bg-blue-100/70 border border-blue-200/80 px-3.5 py-1 rounded-full shadow-xs">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Interactive Visual Journey</span>
-          </div>
+
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight text-balance">
-            How Vanguard Delivers Your School Books
+            How Bookstore Delivers Your School Books
           </h2>
           <p className="text-base text-slate-600 leading-relaxed">
             Eliminate chaotic queues outside stationery stores. Get the exact, school-approved 

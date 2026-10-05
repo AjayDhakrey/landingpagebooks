@@ -54,7 +54,7 @@ export const DemoRequestModal: React.FC<DemoRequestModalProps> = ({ isOpen, onCl
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-700" />
             <h3 id="demo-modal-title" className="font-bold text-slate-900 text-lg">
-              Partner With Vanguard
+              Partner With Bookstore
             </h3>
           </div>
           <button

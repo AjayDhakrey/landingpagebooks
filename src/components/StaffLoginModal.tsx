@@ -27,14 +27,14 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({ isOpen, onClos
       title: 'Campus POS Terminal',
       icon: UserCheck,
       desc: 'On-site book counter checkout, barcode scanner & roll-call lookup.',
-      demoEmail: 'counter01@vanguard.pos',
+      demoEmail: 'counter01@Bookstore.pos',
     },
     {
       id: 'warehouse',
       title: 'Warehouse & Fulfillment',
       icon: Warehouse,
       desc: 'Batch packing line, tamper-proof sealing & BlueDart manifest dispatch.',
-      demoEmail: 'hub.delhi@vanguard.logistics',
+      demoEmail: 'hub.delhi@Bookstore.logistics',
     },
     {
       id: 'publisher',
@@ -69,7 +69,7 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({ isOpen, onClos
           <div className="flex items-center gap-2">
             <Lock className="w-5 h-5 text-blue-700" />
             <h3 id="staff-modal-title" className="font-bold text-slate-900 text-base">
-              Vanguard Enterprise Portal
+              Bookstore Enterprise Portal
             </h3>
           </div>
           <button
@@ -109,7 +109,7 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({ isOpen, onClos
         ) : (
           <div className="p-6 space-y-5 text-xs">
             <p className="text-slate-600">
-              Select your organization role to access Vanguard institutional tools.
+              Select your organization role to access Bookstore institutional tools.
             </p>
 
             {/* Role cards */}

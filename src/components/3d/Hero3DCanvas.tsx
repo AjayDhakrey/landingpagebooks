@@ -337,7 +337,7 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ onExploreBundle }) =
     mainBox.castShadow = true;
     boxGroup.add(mainBox);
 
-    // Vanguard Blue Security Sealing Tape
+    // Bookstore Blue Security Sealing Tape
     const tapeMat = new THREE.MeshStandardMaterial({
       color: 0x3b82f6,
       roughness: 0.2,

@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             V
           </div>
           <span className="font-extrabold text-xl tracking-tight text-slate-900">
-            Vanguard<span className="text-blue-600">.</span>
+            Bookstore<span className="text-blue-600">.</span>
           </span>
         </a>
 

@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="space-y-2 text-center lg:text-left z-10">
             <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full text-blue-400 font-semibold text-[11px]">
               <Smartphone className="w-3.5 h-3.5" />
-              <span>Vanguard Mobile App for iOS &amp; Android</span>
+              <span>Bookstore Mobile App for iOS &amp; Android</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
               Order Verified School Books on the Go
@@ -102,7 +102,7 @@ export const Footer: React.FC<FooterProps> = ({
                 V
               </div>
               <span className="font-extrabold text-xl tracking-tight text-white">
-                Vanguard<span className="text-blue-500">.</span>
+                Bookstore<span className="text-blue-500">.</span>
               </span>
             </div>
 
@@ -114,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="pt-2 flex flex-col gap-2 text-slate-300 text-xs">
               <div className="flex items-center gap-2 hover:text-white transition-colors">
                 <Phone className="w-3.5 h-3.5 text-blue-400" />
-                <span>Parent Concierge: 1800-845-VANGUARD (Mon–Sat, 8am–8pm)</span>
+                <span>Parent Concierge: 1800-845-Bookstore (Mon–Sat, 8am–8pm)</span>
               </div>
               <div className="flex items-center gap-2 hover:text-white transition-colors">
                 <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
@@ -222,7 +222,7 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Legal & Meta */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-[11px]">
-          <p>© {new Date().getFullYear()} Vanguard Distribution Technologies Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Bookstore Distribution Technologies Inc. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4">
             <a href="#faqs" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
             <span>·</span>
@@ -240,3 +240,4 @@ export const Footer: React.FC<FooterProps> = ({
     </footer>
   );
 };
+

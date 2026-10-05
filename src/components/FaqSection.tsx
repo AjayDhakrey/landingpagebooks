@@ -11,23 +11,23 @@ export const FaqSection: React.FC = () => {
     },
     {
       q: 'How does the "No Login Required" tracking work?',
-      a: 'We understand parents have enough accounts and passwords to remember. Every Vanguard order is assigned an encrypted 7-character identifier (e.g., VG-84920). You can check your real-time packing, tamper-proof seal status, and delivery vehicle dispatch simply by entering your Order ID or your WhatsApp mobile number.',
+      a: 'We understand parents have enough accounts and passwords to remember. Every Bookstore order is assigned an encrypted 7-character identifier (e.g., VG-84920). You can check your real-time packing, tamper-proof seal status, and delivery vehicle dispatch simply by entering your Order ID or your WhatsApp mobile number.',
     },
     {
       q: 'What if our school alters a textbook edition after my order is placed?',
-      a: 'Vanguard maintains direct digital integration with each partner school registrar. If the school academic council updates any title or syllabus edition prior to term commencement, Vanguard automatically dispatches the updated revision to your doorstep at zero extra cost, picking up the superseded volume.',
+      a: 'Bookstore maintains direct digital integration with each partner school registrar. If the school academic council updates any title or syllabus edition prior to term commencement, Bookstore automatically dispatches the updated revision to your doorstep at zero extra cost, picking up the superseded volume.',
     },
     {
       q: 'What is your return and replacement policy for misprints or defective pages?',
       a: 'Every bundle comes with a 100% Zero-Defect Guarantee. If any book has missing pages, inverted binding, or shipping damage, simply tap "Request Replacement" from the Order Tracking screen or text our WhatsApp concierge. A brand-new copy is delivered within 24 hours.',
     },
     {
-      q: 'How does Vanguard ensure books are 100% genuine and not pirated copies?',
-      a: 'Vanguard procures strictly through direct institutional purchase orders with primary publishers including NCERT, Oxford University Press, Cambridge University Press, Pearson, Selina, and S. Chand. Every book passes barcode verification before packaging.',
+      q: 'How does Bookstore ensure books are 100% genuine and not pirated copies?',
+      a: 'Bookstore procures strictly through direct institutional purchase orders with primary publishers including NCERT, Oxford University Press, Cambridge University Press, Pearson, Selina, and S. Chand. Every book passes barcode verification before packaging.',
     },
     {
-      q: 'Can schools use Vanguard for physical distribution on campus?',
-      a: 'Absolutely. Many of our 450+ partner schools utilize Vanguard Campus POS terminals during orientation week. Parents can collect pre-packed boxes at school counters with roll-number lookup, or choose doorstep delivery.',
+      q: 'Can schools use Bookstore for physical distribution on campus?',
+      a: 'Absolutely. Many of our 450+ partner schools utilize Bookstore Campus POS terminals during orientation week. Parents can collect pre-packed boxes at school counters with roll-number lookup, or choose doorstep delivery.',
     },
   ];
 

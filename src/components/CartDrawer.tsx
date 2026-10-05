@@ -52,7 +52,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         estimatedDelivery: 'Tomorrow by 4:00 PM',
         currentStatus: 'placed',
         statusDescription: 'Order confirmed. Student syllabus matched with school registrar. Packaging in progress.',
-        carrier: 'Vanguard Express Logistics',
+        carrier: 'Bookstore Express Logistics',
         trackingNumber: `VG-EXP-${randomNum}`,
         shippingAddress: address,
         packageDetails: {

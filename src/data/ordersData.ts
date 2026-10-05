@@ -12,7 +12,7 @@ export const SAMPLE_ORDERS: Record<string, OrderTrackingInfo> = {
     estimatedDelivery: 'Today by 5:30 PM',
     currentStatus: 'dispatched',
     statusDescription: 'Courier executive Ramesh K. is out for doorstep delivery. Please keep OTP handy.',
-    carrier: 'BlueDart Vanguard Priority',
+    carrier: 'BlueDart Bookstore Priority',
     trackingNumber: 'BD-VG-99281744-IN',
     shippingAddress: 'Apartment 402, Tower B, Palm Springs, Sector 54, Golf Course Road, Gurugram 122002',
     packageDetails: {
@@ -76,7 +76,7 @@ export const SAMPLE_ORDERS: Record<string, OrderTrackingInfo> = {
     estimatedDelivery: 'Tomorrow by 2:00 PM',
     currentStatus: 'preparing',
     statusDescription: 'Bundle is being assembled and labeled with custom student name tags at the Mumbai hub.',
-    carrier: 'Vanguard Campus Logistics',
+    carrier: 'Bookstore Campus Logistics',
     trackingNumber: 'VCL-MUM-481902',
     shippingAddress: 'Flat 12B, Sea Crest Towers, Worli Sea Face, Mumbai 400030',
     packageDetails: {
@@ -204,7 +204,7 @@ export const SAMPLE_ORDERS: Record<string, OrderTrackingInfo> = {
     estimatedDelivery: 'Oct 15 by 4:00 PM',
     currentStatus: 'ready',
     statusDescription: 'Bundle is packed, sealed, and awaiting courier pickup at Hyderabad central hub.',
-    carrier: 'Vanguard Hyderabad Express',
+    carrier: 'Bookstore Hyderabad Express',
     trackingNumber: 'HYD-VG-192837',
     shippingAddress: 'Plot 89, Phase 2, Jubilee Hills, Hyderabad 500033',
     packageDetails: {

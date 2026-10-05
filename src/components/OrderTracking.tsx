@@ -47,7 +47,10 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-
+          <div className="inline-flex items-center gap-2 bg-emerald-100/90 text-emerald-900 text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-300/80 shadow-xs">
+            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+            <span>No Login Required for Parents</span>
+          </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight text-balance">
             Track Your School Book Bundle
           </h2>

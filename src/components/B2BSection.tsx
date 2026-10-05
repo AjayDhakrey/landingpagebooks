@@ -30,7 +30,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
       label: 'Demand Forecasting',
       title: 'Predict Exact Enrollment Print Runs',
       description:
-        'Vanguard aggregates student registration numbers across sections and grades to calculate precise textbook order quantities. Eliminate over-ordering stock and prevent mid-term stockouts.',
+        'Bookstore aggregates student registration numbers across sections and grades to calculate precise textbook order quantities. Eliminate over-ordering stock and prevent mid-term stockouts.',
       metrics: [
         { label: 'Inventory Waste Reduction', value: '94%' },
         { label: 'Turnaround Time', value: '3 Days' },
@@ -84,7 +84,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
       label: 'Payments & Reconciliation',
       title: 'Automated Multi-Party Ledger & Escrow',
       description:
-        'Eliminate manual spreadsheets and reconciliation headaches. Vanguard automatically splits transaction payouts between publisher invoices, distributor margins, and school administrative royalties with instant audit reports.',
+        'Eliminate manual spreadsheets and reconciliation headaches. Bookstore automatically splits transaction payouts between publisher invoices, distributor margins, and school administrative royalties with instant audit reports.',
       metrics: [
         { label: 'Reconciliation Speed', value: 'Same-Day' },
         { label: 'Audit Compliance', value: 'GST & TDS Auto' },
@@ -120,7 +120,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
               The Complete Distribution Platform for Schools &amp; Publishers
             </h2>
             <p className="text-base text-slate-300 leading-relaxed">
-              Vanguard modernizes the entire textbook supply chain. From admission pre-orders 
+              Bookstore modernizes the entire textbook supply chain. From admission pre-orders 
               and publisher purchase orders to on-campus POS counters and automated financial reconciliation.
             </p>
           </div>
@@ -196,7 +196,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
                 onClick={onRequestDemo}
                 className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 transition-colors"
               >
-                <span>Learn how Vanguard deploys in 48 hours</span>
+                <span>Learn how Bookstore deploys in 48 hours</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -215,7 +215,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({ onRequestDemo }) => {
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                   </div>
                   <span className="text-xs font-mono text-slate-400 ml-2">
-                    Vanguard Console · {currentTab.label}
+                    Bookstore Console · {currentTab.label}
                   </span>
                 </div>
                 

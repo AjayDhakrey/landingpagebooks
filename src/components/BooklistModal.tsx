@@ -297,7 +297,7 @@ export const BooklistModal: React.FC<BooklistModalProps> = ({
           <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-xl p-3.5 flex items-center gap-3 text-xs text-emerald-900">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
-              <strong>Vanguard Complete Assurance:</strong> Every book matches the official curriculum notified by the principal’s office. If any edition differs, we replace it within 24 hours at zero cost.
+              <strong>Bookstore Complete Assurance:</strong> Every book matches the official curriculum notified by the principal’s office. If any edition differs, we replace it within 24 hours at zero cost.
             </span>
           </div>
 

@@ -1,5 +1,5 @@
 {
-  "name": "Vanguard — School Book & Stationery Distribution Platform",
+  "name": "Bookstore — School Book & Stationery Distribution Platform",
   "description": "Official school booklists, customized curriculum bundles, and quality stationery delivered directly to your doorstep with live tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
