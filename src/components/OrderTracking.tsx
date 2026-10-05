@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles, Play } from 'lucide-react';
 import { SAMPLE_ORDERS } from '../data/ordersData';
-import { OrderTrackingInfo, OrderMilestone } from '../types';
+import { OrderTrackingInfo } from '../types';
 
 interface OrderTrackingProps {
   initialOrderId?: string;
@@ -14,6 +14,53 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
   );
   const [isSearching, setIsSearching] = useState(false);
   const [notFound, setNotFound] = useState(false);
+
+  // Status mapping to step index
+  const statusMap: Record<string, number> = {
+    placed: 0,
+    preparing: 1,
+    ready: 2,
+    dispatched: 3,
+    delivered: 4,
+  };
+
+  const targetStepIdx = currentOrder ? (statusMap[currentOrder.currentStatus] ?? 0) : 0;
+  const [animatedStepIdx, setAnimatedStepIdx] = useState(0);
+  const [animatedProgress, setAnimatedProgress] = useState(0);
+  const [isReplaying, setIsReplaying] = useState(false);
+
+  // Trigger smooth step-by-step flow animation
+  const runFlowAnimation = (targetIdx: number) => {
+    setIsReplaying(true);
+    setAnimatedStepIdx(0);
+    setAnimatedProgress(0);
+
+    let step = 0;
+    const intervalTime = 600; // ms per step transition
+
+    const timer = setInterval(() => {
+      if (step < targetIdx) {
+        step += 1;
+        setAnimatedStepIdx(step);
+        // Step progress calculation (0 to 100%)
+        const targetPercent = (step / 4) * 100;
+        setAnimatedProgress(targetPercent);
+      } else {
+        clearInterval(timer);
+        setIsReplaying(false);
+      }
+    }, intervalTime);
+
+    return () => clearInterval(timer);
+  };
+
+  // Run on mount or when current order changes
+  useEffect(() => {
+    if (currentOrder) {
+      const cleanup = runFlowAnimation(targetStepIdx);
+      return cleanup;
+    }
+  }, [currentOrder?.orderId, targetStepIdx]);
 
   const handleTrackSubmit = (e?: React.FormEvent, customId?: string) => {
     if (e) e.preventDefault();
@@ -142,85 +189,119 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                 </p>
               </div>
 
-              <div className="text-left md:text-right">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950 border border-emerald-500/40 text-emerald-400">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="capitalize">{currentOrder.currentStatus}</span>
+              <div className="flex flex-col md:items-end gap-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => runFlowAnimation(targetStepIdx)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-950 border border-blue-400/40 text-blue-300 hover:bg-blue-900 hover:text-white transition-all shadow-xs active:scale-95"
+                    title="Replay step-by-step dispatch flow"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isReplaying ? 'animate-spin' : ''}`} />
+                    <span>Replay Journey</span>
+                  </button>
+
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950 border border-emerald-500/40 text-emerald-400">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="capitalize">{currentOrder.currentStatus}</span>
+                  </div>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-400">
                   Est. Delivery: <strong className="text-white">{currentOrder.estimatedDelivery}</strong>
                 </p>
               </div>
             </div>
 
             {/* Stepper: Order Placed → Preparing → Ready → Out for Delivery → Delivered */}
-            <div className="px-6 py-8 border-b border-slate-200 bg-slate-50/70 relative">
+            <div className="px-6 py-10 border-b border-slate-200 bg-slate-50/70 relative overflow-hidden">
               
-              {/* Progress Line Bar */}
+              {/* Progress Line Bar (Desktop Horizontal) */}
               <div className="relative mb-6">
-                {/* Background track */}
-                <div className="hidden md:block absolute top-5 left-10 right-10 h-1.5 bg-slate-200 rounded-full z-0" />
                 
-                {/* Animated active fill */}
-                {(() => {
-                  const statusMap: Record<string, number> = {
-                    placed: 0,
-                    preparing: 1,
-                    ready: 2,
-                    dispatched: 3,
-                    delivered: 4,
-                  };
-                  const currIdx = statusMap[currentOrder.currentStatus] ?? 0;
-                  const percent = (currIdx / 4) * 100;
+                {/* 1. Base Grey Track Line connecting all node centers */}
+                <div className="hidden md:block absolute top-5 left-[10%] right-[10%] h-1.5 bg-slate-200 rounded-full z-0" />
+                
+                {/* 2. Animated Flow Line - Dynamic Gradient with glowing beam */}
+                <div
+                  className="hidden md:block absolute top-5 left-[10%] h-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 rounded-full z-0 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(37,99,235,0.45)]"
+                  style={{ width: `${(animatedProgress * 0.8)}%` }}
+                />
 
-                  return (
-                    <>
-                      <div
-                        className="hidden md:block absolute top-5 left-10 h-1.5 bg-gradient-to-r from-blue-700 via-blue-600 to-emerald-500 rounded-full z-0 transition-all duration-700 shadow-xs"
-                        style={{ width: `calc(${percent}% * 0.82)` }}
-                      />
+                {/* 3. Traveling Package Courier Icon that glides along the line */}
+                <div
+                  className="hidden md:flex absolute top-1 items-center justify-center z-30 transition-all duration-700 ease-out -translate-x-1/2 pointer-events-none"
+                  style={{ left: `calc(10% + ${(animatedProgress * 0.8)}%)` }}
+                >
+                  <div className="relative flex items-center justify-center">
+                    {/* Pulsing radar ring */}
+                    <div className="absolute w-10 h-10 rounded-full bg-blue-500/30 animate-ping" />
+                    
+                    {/* Glowing courier package bubble */}
+                    <div className="w-8 h-8 rounded-full bg-blue-700 text-white shadow-lg shadow-blue-600/40 flex items-center justify-center border-2 border-white animate-courier-bob">
+                      <Package className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
 
-                      {/* Moving Package Courier Icon */}
-                      <div
-                        className="hidden md:flex absolute top-1 items-center justify-center w-8 h-8 rounded-full bg-blue-700 text-white shadow-md z-20 transition-all duration-700 -translate-x-1/2"
-                        style={{ left: `calc(2.5rem + ${percent}% * 0.82)` }}
-                      >
-                        <Package className="w-4 h-4 animate-bounce" />
-                      </div>
-                    </>
-                  );
-                })()}
-
-                {/* 5 Milestone Nodes */}
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10">
+                {/* 4. Milestone Nodes (5 steps) */}
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-0 relative z-10">
                   {currentOrder.timeline.map((step, idx) => {
-                    const isCompleted = step.completed;
-                    const isActive = step.active;
+                    const isStepReached = idx <= animatedStepIdx;
+                    const isStepCompleted = idx < animatedStepIdx || (idx <= animatedStepIdx && (step.completed || idx < targetStepIdx));
+                    const isStepActive = idx === animatedStepIdx && (step.active || idx === targetStepIdx);
 
                     return (
-                      <div key={idx} className="flex md:flex-col items-start md:items-center text-left md:text-center gap-4 md:gap-2">
-                        {/* Step Icon circle */}
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-mono text-xs font-bold transition-all shadow-sm ${
-                            isCompleted
-                              ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/20'
-                              : isActive
-                              ? 'bg-blue-700 text-white ring-4 ring-blue-100 animate-pulse shadow-blue-500/30'
-                              : 'bg-white border-2 border-slate-300 text-slate-400'
-                          }`}
-                        >
-                          {isCompleted ? (
-                            <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
-                          ) : (
-                            <span>0{idx + 1}</span>
+                      <div
+                        key={idx}
+                        className={`flex md:flex-col items-start md:items-center text-left md:text-center gap-4 md:gap-3 cursor-pointer group transition-all duration-500 ${
+                          isStepReached ? 'opacity-100' : 'opacity-60 hover:opacity-90'
+                        }`}
+                        onClick={() => {
+                          setAnimatedStepIdx(idx);
+                          setAnimatedProgress((idx / 4) * 100);
+                        }}
+                      >
+                        {/* Milestone Circle */}
+                        <div className="relative flex items-center justify-center">
+                          {/* Active Blue Halo for currently active step */}
+                          {isStepActive && (
+                            <div className="absolute -inset-2 rounded-full bg-blue-500/20 animate-pulse pointer-events-none" />
                           )}
+
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-mono text-xs font-bold transition-all duration-500 shadow-md ${
+                              isStepCompleted
+                                ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/30 scale-100'
+                                : isStepActive
+                                ? 'bg-blue-600 text-white ring-8 ring-blue-100/90 shadow-blue-600/40 scale-110'
+                                : 'bg-white border-2 border-slate-300 text-slate-400'
+                            } ${isStepReached ? 'animate-pop-bounce' : ''}`}
+                          >
+                            {isStepCompleted ? (
+                              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                            ) : (
+                              <span>0{idx + 1}</span>
+                            )}
+                          </div>
                         </div>
 
-                        <div>
-                          <p className={`text-xs font-bold leading-tight ${isActive ? 'text-blue-700' : isCompleted ? 'text-slate-900' : 'text-slate-400'}`}>
+                        {/* Title & Timestamp */}
+                        <div className="transition-all duration-300">
+                          <p
+                            className={`text-xs font-bold leading-tight transition-colors ${
+                              isStepActive
+                                ? 'text-blue-700 font-extrabold'
+                                : isStepCompleted
+                                ? 'text-slate-900'
+                                : 'text-slate-400'
+                            }`}
+                          >
                             {step.title}
                           </p>
-                          <p className="text-[11px] text-slate-500 mt-0.5">
+                          <p
+                            className={`text-[11px] mt-0.5 transition-colors ${
+                              isStepActive ? 'text-blue-600 font-semibold' : 'text-slate-500'
+                            }`}
+                          >
                             {step.timestamp}
                           </p>
                         </div>
