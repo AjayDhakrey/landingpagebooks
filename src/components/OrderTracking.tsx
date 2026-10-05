@@ -47,10 +47,7 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center gap-2 bg-emerald-100/90 text-emerald-900 text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-300/80 shadow-xs">
-            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-            <span>No Login Required for Parents</span>
-          </div>
+
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight text-balance">
             Track Your School Book Bundle
           </h2>
@@ -291,7 +288,7 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                 <div className="pt-2">
                   <div className="flex items-center gap-1.5 text-blue-700 font-semibold">
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Courier Helpline: 1800-845-VANGUARD</span>
+                    <span>Courier Helpline: 1800-845-Bookstore</span>
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
                     WhatsApp dispatch notification sent to {currentOrder.customerPhone}
