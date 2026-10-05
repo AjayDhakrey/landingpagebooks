@@ -175,7 +175,7 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
       const currentTarget = stepRef.current;
 
       // Smooth scale interpolation between steps for transition
-      const lerpSpeed = 0.12;
+      const lerpSpeed = 0.14;
       step0Group.scale.lerp(new THREE.Vector3(currentTarget === 0 ? 1 : 0.0001, currentTarget === 0 ? 1 : 0.0001, currentTarget === 0 ? 1 : 0.0001), lerpSpeed);
       step1Group.scale.lerp(new THREE.Vector3(currentTarget === 1 ? 1 : 0.0001, currentTarget === 1 ? 1 : 0.0001, currentTarget === 1 ? 1 : 0.0001), lerpSpeed);
       step2Group.scale.lerp(new THREE.Vector3(currentTarget === 2 ? 1 : 0.0001, currentTarget === 2 ? 1 : 0.0001, currentTarget === 2 ? 1 : 0.0001), lerpSpeed);
@@ -187,36 +187,36 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
       if (!prefersReducedMotion) {
         // Step 0 animation
         if (step0Group.visible) {
-          step0Group.rotation.y = elapsed * 0.4;
+          step0Group.rotation.y = elapsed * 0.45;
           step0Group.position.y = Math.sin(elapsed * 1.5) * 0.08;
         }
 
-        // Step 1 animation: continuous 3D book stacking & floating loop
+        // Step 1 animation: continuous 3D book stacking (matched to 3.0 second rhythm)
         if (step1Group.visible) {
-          const stackCycle = elapsed % 4.0;
-          step1Group.rotation.y = elapsed * 0.3;
+          const stackCycle = elapsed % 3.0;
+          step1Group.rotation.y = elapsed * 0.35;
 
           bookMeshes.forEach((b, i) => {
             const finalY = -0.5 + i * 0.16;
-            const startDelay = i * 0.35;
-            const flyTime = Math.max(0, Math.min(1, (stackCycle - startDelay) / 0.6));
+            const startDelay = i * 0.25;
+            const flyTime = Math.max(0, Math.min(1, (stackCycle - startDelay) / 0.45));
             const easeY = 1 - Math.pow(1 - flyTime, 3);
             
-            if (stackCycle < 2.8) {
+            if (stackCycle < 2.0) {
               b.position.y = THREE.MathUtils.lerp(finalY + 1.2, finalY, easeY);
               b.position.x = THREE.MathUtils.lerp((i % 2 === 0 ? 0.8 : -0.8), 0, easeY);
               b.rotation.y = ((i % 2) - 0.5) * 0.08 + THREE.MathUtils.lerp(0.3, 0, easeY);
             } else {
-              const floatOffset = Math.sin(elapsed * 2.5 + i * 0.5) * 0.03;
+              const floatOffset = Math.sin(elapsed * 3.0 + i * 0.6) * 0.035;
               b.position.y = finalY + floatOffset;
               b.position.x = 0;
             }
           });
 
-          if (stackCycle > 2.0) {
-            const ribbonPop = Math.min(1, (stackCycle - 2.0) / 0.5);
+          if (stackCycle > 1.5) {
+            const ribbonPop = Math.min(1, (stackCycle - 1.5) / 0.4);
             ribbon.scale.setScalar(THREE.MathUtils.lerp(0.001, 1.0, ribbonPop));
-            ribbon.position.y = -0.15 + Math.sin(elapsed * 2.5) * 0.03;
+            ribbon.position.y = -0.15 + Math.sin(elapsed * 3.0) * 0.035;
           } else {
             ribbon.scale.setScalar(0.0001);
           }
@@ -224,9 +224,9 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
 
         // Step 2 animation: box & GPS tracking
         if (step2Group.visible) {
-          step2Group.rotation.y = elapsed * 0.45;
-          step2Group.position.y = Math.sin(elapsed * 2) * 0.1;
-          trajectoryRing.rotation.z = elapsed * 0.8;
+          step2Group.rotation.y = elapsed * 0.5;
+          step2Group.position.y = Math.sin(elapsed * 2.2) * 0.1;
+          trajectoryRing.rotation.z = elapsed * 1.0;
         }
       }
 
@@ -251,7 +251,7 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
         }
       });
     };
-  }, []); // Run once on mount, sync smoothly via stepRef
+  }, []);
 
   return (
     <div
