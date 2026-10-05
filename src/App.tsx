@@ -116,18 +116,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
-      {/* Top Banner Notice */}
-      <div className="bg-blue-900 text-white text-xs py-2 px-4 text-center font-medium flex items-center justify-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-        <span>Academic Year 2026–2027 Bundles Now Live for Over 450+ Partner Schools.</span>
-        <button
-          onClick={scrollToSchools}
-          className="underline hover:text-blue-200 ml-1 font-semibold"
-        >
-          View School Directory
-        </button>
-      </div>
-
       {/* Primary Top Bar */}
       <Navbar
         onOpenSearch={scrollToSearch}
