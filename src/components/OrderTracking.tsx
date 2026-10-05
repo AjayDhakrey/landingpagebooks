@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles, Repeat, Pause, Play } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Package, Truck, CheckCircle2, Clock, ShieldCheck, MapPin, RefreshCw, AlertCircle, Phone, Sparkles } from 'lucide-react';
 import { SAMPLE_ORDERS } from '../data/ordersData';
-import { OrderTrackingInfo } from '../types';
+import { OrderTrackingInfo, OrderMilestone } from '../types';
 
 interface OrderTrackingProps {
   initialOrderId?: string;
@@ -14,66 +14,6 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
   );
   const [isSearching, setIsSearching] = useState(false);
   const [notFound, setNotFound] = useState(false);
-
-  // Status mapping to step index (0: Placed, 1: Preparing, 2: Ready, 3: Dispatched/Out for Delivery, 4: Delivered)
-  const statusMap: Record<string, number> = {
-    placed: 0,
-    preparing: 1,
-    ready: 2,
-    dispatched: 3,
-    delivered: 4,
-  };
-
-  const targetStepIdx = currentOrder ? (statusMap[currentOrder.currentStatus] ?? 3) : 3;
-  // Maximum step for the 4-section flow (indices 0, 1, 2, 3)
-  const maxLoopStep = Math.min(targetStepIdx, 3);
-
-  const [animatedStepIdx, setAnimatedStepIdx] = useState(0);
-  const [isAutoLoop, setIsAutoLoop] = useState(true);
-  const loopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Continuous looping animation through the 4 sections (Step 0 -> 1 -> 2 -> 3)
-  useEffect(() => {
-    if (!isAutoLoop) return;
-
-    let isMounted = true;
-    let currentStep = 0;
-
-    const stepInterval = 850; // ms per step transition
-    const holdAtEndDuration = 2400; // ms to pause at 4th section (Out for Delivery) before restarting
-
-    const runStep = () => {
-      if (!isMounted) return;
-
-      setAnimatedStepIdx(currentStep);
-
-      if (currentStep < maxLoopStep) {
-        currentStep += 1;
-        loopTimeoutRef.current = setTimeout(runStep, stepInterval);
-      } else {
-        // Hold at 4th section (Out for Delivery), then loop back to first step
-        loopTimeoutRef.current = setTimeout(() => {
-          if (!isMounted) return;
-          currentStep = 0;
-          setAnimatedStepIdx(0);
-          loopTimeoutRef.current = setTimeout(runStep, 400);
-        }, holdAtEndDuration);
-      }
-    };
-
-    runStep();
-
-    return () => {
-      isMounted = false;
-      if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
-    };
-  }, [isAutoLoop, currentOrder?.orderId, maxLoopStep]);
-
-  const handleManualReplay = () => {
-    if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
-    setIsAutoLoop(true);
-    setAnimatedStepIdx(0);
-  };
 
   const handleTrackSubmit = (e?: React.FormEvent, customId?: string) => {
     if (e) e.preventDefault();
@@ -100,11 +40,6 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
   };
 
   const sampleOrderIds = ['VG-84920', 'VG-92841', 'VG-77402', 'VG-61093'];
-
-  // Calculate percentage width for line and position of courier badge (10% to 90% across 5 nodes)
-  // Node centers are located at: 10% (0), 30% (1), 50% (2), 70% (3), 90% (4)
-  const lineFillWidth = `${animatedStepIdx * 20}%`;
-  const courierLeftPos = `calc(10% + ${animatedStepIdx * 20}%)`;
 
   return (
     <section id="track-order" className="py-20 bg-slate-50 border-y border-slate-200">
@@ -207,138 +142,85 @@ export const OrderTracking: React.FC<OrderTrackingProps> = ({ initialOrderId = '
                 </p>
               </div>
 
-              <div className="flex flex-col md:items-end gap-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  {/* Auto-Loop Toggle */}
-                  <button
-                    onClick={() => setIsAutoLoop((prev) => !prev)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all shadow-xs active:scale-95 ${
-                      isAutoLoop
-                        ? 'bg-blue-600/90 border-blue-400 text-white shadow-blue-500/30 ring-2 ring-blue-400/30'
-                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
-                    }`}
-                    title="Toggle continuous 4-step loop animation"
-                  >
-                    <Repeat className={`w-3.5 h-3.5 ${isAutoLoop ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
-                    <span>{isAutoLoop ? 'Looping 4 Steps' : 'Loop Paused'}</span>
-                  </button>
-
-                  {/* Replay Flow */}
-                  <button
-                    onClick={handleManualReplay}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-200 hover:bg-blue-900 hover:text-white transition-all shadow-xs active:scale-95"
-                    title="Replay 4-step dispatch flow from beginning"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Replay</span>
-                  </button>
-
-                  {/* Status Badge */}
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950 border border-emerald-500/40 text-emerald-400">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span className="capitalize">{currentOrder.currentStatus}</span>
-                  </div>
+              <div className="text-left md:text-right">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950 border border-emerald-500/40 text-emerald-400">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="capitalize">{currentOrder.currentStatus}</span>
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 mt-1">
                   Est. Delivery: <strong className="text-white">{currentOrder.estimatedDelivery}</strong>
                 </p>
               </div>
             </div>
 
             {/* Stepper: Order Placed → Preparing → Ready → Out for Delivery → Delivered */}
-            <div className="px-6 py-10 border-b border-slate-200 bg-slate-50/70 relative overflow-hidden">
+            <div className="px-6 py-8 border-b border-slate-200 bg-slate-50/70 relative">
               
-              {/* Progress Line Bar (Desktop Horizontal) */}
+              {/* Progress Line Bar */}
               <div className="relative mb-6">
+                {/* Background track */}
+                <div className="hidden md:block absolute top-5 left-10 right-10 h-1.5 bg-slate-200 rounded-full z-0" />
                 
-                {/* 1. Base Grey Track Line connecting all node centers (from 10% to 90%) */}
-                <div className="hidden md:block absolute top-5 left-[10%] right-[10%] h-1.5 bg-slate-200 rounded-full z-0" />
-                
-                {/* 2. Animated Flow Line - Dynamic Gradient connecting from step 0 to active step */}
-                <div
-                  className="hidden md:block absolute top-5 left-[10%] h-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 rounded-full z-0 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(37,99,235,0.45)]"
-                  style={{ width: lineFillWidth }}
-                />
+                {/* Animated active fill */}
+                {(() => {
+                  const statusMap: Record<string, number> = {
+                    placed: 0,
+                    preparing: 1,
+                    ready: 2,
+                    dispatched: 3,
+                    delivered: 4,
+                  };
+                  const currIdx = statusMap[currentOrder.currentStatus] ?? 0;
+                  const percent = (currIdx / 4) * 100;
 
-                {/* 3. Traveling Package Courier Icon that glides along the 4 steps in a loop */}
-                <div
-                  className="hidden md:flex absolute top-1 items-center justify-center z-30 transition-all duration-700 ease-out -translate-x-1/2 pointer-events-none"
-                  style={{ left: courierLeftPos }}
-                >
-                  <div className="relative flex items-center justify-center">
-                    {/* Pulsing radar ring */}
-                    <div className="absolute w-10 h-10 rounded-full bg-blue-500/30 animate-ping" />
-                    
-                    {/* Glowing courier package bubble */}
-                    <div className="w-8 h-8 rounded-full bg-blue-700 text-white shadow-lg shadow-blue-600/40 flex items-center justify-center border-2 border-white animate-courier-bob">
-                      <Package className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
+                  return (
+                    <>
+                      <div
+                        className="hidden md:block absolute top-5 left-10 h-1.5 bg-gradient-to-r from-blue-700 via-blue-600 to-emerald-500 rounded-full z-0 transition-all duration-700 shadow-xs"
+                        style={{ width: `calc(${percent}% * 0.82)` }}
+                      />
 
-                {/* 4. Milestone Nodes (5 steps total, looping through the 4 active sections) */}
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-0 relative z-10">
+                      {/* Moving Package Courier Icon */}
+                      <div
+                        className="hidden md:flex absolute top-1 items-center justify-center w-8 h-8 rounded-full bg-blue-700 text-white shadow-md z-20 transition-all duration-700 -translate-x-1/2"
+                        style={{ left: `calc(2.5rem + ${percent}% * 0.82)` }}
+                      >
+                        <Package className="w-4 h-4 animate-bounce" />
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* 5 Milestone Nodes */}
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10">
                   {currentOrder.timeline.map((step, idx) => {
-                    const isStepReached = idx <= animatedStepIdx;
-                    const isStepCompleted = idx < animatedStepIdx;
-                    const isStepActive = idx === animatedStepIdx;
+                    const isCompleted = step.completed;
+                    const isActive = step.active;
 
                     return (
-                      <div
-                        key={idx}
-                        className={`flex md:flex-col items-start md:items-center text-left md:text-center gap-4 md:gap-3 cursor-pointer group transition-all duration-500 ${
-                          isStepReached ? 'opacity-100' : 'opacity-60 hover:opacity-90'
-                        }`}
-                        onClick={() => {
-                          if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
-                          setIsAutoLoop(false);
-                          setAnimatedStepIdx(idx);
-                        }}
-                      >
-                        {/* Milestone Circle */}
-                        <div className="relative flex items-center justify-center">
-                          {/* Active Blue Halo when reached in the loop */}
-                          {isStepActive && (
-                            <div className="absolute -inset-2 rounded-full bg-blue-500/20 animate-pulse pointer-events-none" />
+                      <div key={idx} className="flex md:flex-col items-start md:items-center text-left md:text-center gap-4 md:gap-2">
+                        {/* Step Icon circle */}
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-mono text-xs font-bold transition-all shadow-sm ${
+                            isCompleted
+                              ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/20'
+                              : isActive
+                              ? 'bg-blue-700 text-white ring-4 ring-blue-100 animate-pulse shadow-blue-500/30'
+                              : 'bg-white border-2 border-slate-300 text-slate-400'
+                          }`}
+                        >
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                          ) : (
+                            <span>0{idx + 1}</span>
                           )}
-
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-mono text-xs font-bold transition-all duration-500 shadow-md ${
-                              isStepCompleted
-                                ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/30 scale-100'
-                                : isStepActive
-                                ? idx === 3
-                                  ? 'bg-blue-600 text-white ring-8 ring-blue-100/90 shadow-blue-600/40 scale-110'
-                                  : 'bg-emerald-600 text-white ring-4 ring-emerald-100 shadow-emerald-500/30 scale-105'
-                                : 'bg-white border-2 border-slate-300 text-slate-400'
-                            } ${isStepReached ? 'animate-pop-bounce' : ''}`}
-                          >
-                            {isStepCompleted || (isStepActive && idx < 3) ? (
-                              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
-                            ) : (
-                              <span>0{idx + 1}</span>
-                            )}
-                          </div>
                         </div>
 
-                        {/* Title & Timestamp */}
-                        <div className="transition-all duration-300">
-                          <p
-                            className={`text-xs font-bold leading-tight transition-colors ${
-                              isStepActive
-                                ? idx === 3 ? 'text-blue-700 font-extrabold' : 'text-emerald-700 font-bold'
-                                : isStepCompleted
-                                ? 'text-slate-900'
-                                : 'text-slate-400'
-                            }`}
-                          >
+                        <div>
+                          <p className={`text-xs font-bold leading-tight ${isActive ? 'text-blue-700' : isCompleted ? 'text-slate-900' : 'text-slate-400'}`}>
                             {step.title}
                           </p>
-                          <p
-                            className={`text-[11px] mt-0.5 transition-colors ${
-                              isStepActive ? 'text-blue-600 font-semibold' : 'text-slate-500'
-                            }`}
-                          >
+                          <p className="text-[11px] text-slate-500 mt-0.5">
                             {step.timestamp}
                           </p>
                         </div>
