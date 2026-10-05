@@ -67,3 +67,59 @@
   background-size: 200% 100%;
 }
 
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px -10px rgba(30, 58, 138, 0.12), 0 8px 16px -6px rgba(0, 0, 0, 0.06);
+}
+
+.hover-lift-sm {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -6px rgba(30, 58, 138, 0.08);
+}
+
+.hover-glow-blue {
+  transition: all 0.3s ease;
+}
+
+.hover-glow-blue:hover {
+  box-shadow: 0 0 24px rgba(37, 99, 235, 0.35);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.hover-glow-emerald {
+  transition: all 0.3s ease;
+}
+
+.hover-glow-emerald:hover {
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
+/* Smooth Interactive Button Hover */
+button, a {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Interactive Card Shimmer on Hover */
+.card-interactive {
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px) scale(1.008);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 20px 35px -10px rgba(37, 99, 235, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+

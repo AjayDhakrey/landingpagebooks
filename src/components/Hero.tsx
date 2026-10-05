@@ -125,10 +125,10 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
                         key={city}
                         type="button"
                         onClick={() => setSelectedCity(city)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 whitespace-nowrap hover:scale-105 active:scale-95 ${
                           selectedCity === city
-                            ? 'bg-blue-700 text-white shadow-xs scale-102'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                            ? 'bg-blue-700 text-white shadow-xs'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                         }`}
                       >
                         {city}
@@ -138,10 +138,10 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
 
                   <button
                     type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow-md shadow-blue-700/20 transition-all focus-visible:outline-2 focus-visible:outline-blue-600 whitespace-nowrap active:scale-98"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow-md shadow-blue-700/20 hover:shadow-xl hover:shadow-blue-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-600 whitespace-nowrap group"
                   >
                     <span>Find Books</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </div>
 
@@ -168,7 +168,7 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
                           <div
                             key={school.id}
                             onClick={() => onSelectSchoolGrade(school, selectedGrade)}
-                            className="p-2 hover:bg-blue-50/70 rounded-lg cursor-pointer transition-colors flex items-center justify-between text-left group"
+                            className="p-2 hover:bg-blue-50/80 rounded-xl cursor-pointer transition-all duration-200 hover:translate-x-1 flex items-center justify-between text-left group"
                           >
                             <div className="min-w-0 pr-3">
                               <p className="text-xs font-semibold text-slate-900 group-hover:text-blue-700 truncate">
@@ -182,7 +182,7 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
                                 <span className="font-mono text-slate-400">{school.code}</span>
                               </div>
                             </div>
-                            <span className="text-xs font-semibold text-blue-600 group-hover:translate-x-0.5 transition-transform flex items-center gap-1 shrink-0">
+                            <span className="text-xs font-semibold text-blue-600 group-hover:translate-x-1 transition-transform flex items-center gap-1 shrink-0">
                               View {selectedGrade}
                               <ChevronRight className="w-3.5 h-3.5" />
                             </span>
@@ -197,17 +197,17 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
 
             {/* Trust Badges */}
             <div className="pt-1 flex flex-wrap items-center gap-y-2 gap-x-4 text-xs font-semibold text-slate-700">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-lg hover:bg-slate-100/80 transition-all duration-200 hover:scale-105 cursor-default">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>School-Verified Editions</span>
               </div>
               <span className="text-slate-300 hidden sm:inline" aria-hidden="true">·</span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-lg hover:bg-slate-100/80 transition-all duration-200 hover:scale-105 cursor-default">
                 <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>Secure Payments</span>
               </div>
               <span className="text-slate-300 hidden sm:inline" aria-hidden="true">·</span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-lg hover:bg-slate-100/80 transition-all duration-200 hover:scale-105 cursor-default">
                 <Truck className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>Live Order Tracking</span>
               </div>
@@ -217,17 +217,17 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
 
           {/* Right Column: 3D "School → Books → Bundle → Delivery Box → Home" Interactive Scene */}
           <div className="lg:col-span-6">
-            <div className="relative mx-auto max-w-lg lg:max-w-none">
+            <div className="relative mx-auto max-w-lg lg:max-w-none group">
               
               {/* Glassmorphic 3D Viewport Carrier */}
-              <div className="relative bg-white/70 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-2xl shadow-blue-900/10 overflow-hidden p-2">
+              <div className="relative bg-white/70 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-2xl shadow-blue-900/10 group-hover:shadow-blue-900/20 group-hover:border-blue-300 transition-all duration-500 overflow-hidden p-2">
                 <Hero3DCanvas onExploreBundle={() => {
                   const dps = PARTNER_SCHOOLS[0];
                   onSelectSchoolGrade(dps, 'Grade 6');
                 }} />
 
                 {/* Micro Bar: Quick Booklist Inspect & Live Tracker CTA */}
-                <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-100 flex items-center justify-between gap-3 text-xs">
+                <div className="p-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-100 flex items-center justify-between gap-3 text-xs transition-all hover:bg-white">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping shrink-0" />
                     <p className="font-semibold text-slate-800 truncate">
@@ -241,13 +241,13 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSchoolGrade, onOpenTrack }) 
                         const dps = PARTNER_SCHOOLS.find(s => s.code === 'DPS-RKP') || PARTNER_SCHOOLS[0];
                         onSelectSchoolGrade(dps, selectedGrade);
                       }}
-                      className="text-xs font-bold text-blue-700 hover:text-blue-800 hover:underline px-2 py-1"
+                      className="text-xs font-bold text-blue-700 hover:text-blue-800 hover:underline px-2 py-1 hover:scale-105 transition-transform"
                     >
                       Inspect List
                     </button>
                     <button
                       onClick={onOpenTrack}
-                      className="bg-slate-900 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition-colors"
+                      className="bg-slate-900 hover:bg-blue-700 text-white font-semibold text-xs px-3.5 py-1.5 rounded-xl shadow-xs hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
                     >
                       Track Order
                     </button>

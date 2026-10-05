@@ -31,27 +31,27 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 1: Single Brand Wordmark */}
         <a
           href="#"
-          className="flex items-center gap-2.5 text-slate-900 group shrink-0 focus-visible:outline-2 focus-visible:outline-blue-600 rounded-md"
+          className="flex items-center gap-2.5 text-slate-900 group shrink-0 focus-visible:outline-2 focus-visible:outline-blue-600 rounded-md transition-transform duration-200 hover:scale-[1.02]"
         >
-          <div className="w-8 h-8 rounded-lg bg-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-blue-800 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-blue-800 group-hover:shadow-md group-hover:shadow-blue-600/30 transition-all duration-300">
             V
           </div>
-          <span className="font-extrabold text-xl tracking-tight text-slate-900">
-            Vanguard<span className="text-blue-600">.</span>
+          <span className="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-blue-900 transition-colors">
+            Vanguard<span className="text-blue-600 group-hover:animate-ping">.</span>
           </span>
         </a>
 
         {/* Zone 2: Clean Nav Links */}
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
+        <nav className="hidden lg:flex items-center gap-2 text-sm font-medium text-slate-600">
           <a
             href="#schools"
-            className="hover:text-blue-700 transition-colors py-1 hover:underline underline-offset-8"
+            className="hover:text-blue-700 hover:bg-blue-50/80 px-3 py-1.5 rounded-lg transition-all duration-200"
           >
             Find My School
           </a>
           <a
             href="#how-it-works"
-            className="hover:text-blue-700 transition-colors py-1 hover:underline underline-offset-8"
+            className="hover:text-blue-700 hover:bg-blue-50/80 px-3 py-1.5 rounded-lg transition-all duration-200"
           >
             How It Works
           </a>
@@ -63,19 +63,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               const el = document.getElementById('track-order');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="hover:text-blue-700 transition-colors py-1 hover:underline underline-offset-8"
+            className="hover:text-blue-700 hover:bg-blue-50/80 px-3 py-1.5 rounded-lg transition-all duration-200"
           >
             Track Order
           </a>
           <a
             href="#for-schools"
-            className="hover:text-blue-700 transition-colors py-1 hover:underline underline-offset-8"
+            className="hover:text-blue-700 hover:bg-blue-50/80 px-3 py-1.5 rounded-lg transition-all duration-200"
           >
-            For Schools & Partners
+            For Schools &amp; Partners
           </a>
           <a
             href="#faqs"
-            className="hover:text-blue-700 transition-colors py-1 hover:underline underline-offset-8"
+            className="hover:text-blue-700 hover:bg-blue-50/80 px-3 py-1.5 rounded-lg transition-all duration-200"
           >
             FAQs
           </a>
@@ -87,11 +87,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           {totalCartCount > 0 && (
             <button
               onClick={onOpenCart}
-              className="relative p-2 text-slate-700 hover:text-blue-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="relative p-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95"
               aria-label={`Shopping bag with ${totalCartCount} items`}
             >
               <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center tabular-nums shadow-xs">
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center tabular-nums shadow-xs animate-bounce" style={{ animationDuration: '2s' }}>
                 {totalCartCount}
               </span>
             </button>
@@ -99,16 +99,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onOpenStaffLogin}
-            className="hidden sm:inline-flex text-xs font-semibold text-slate-700 hover:text-blue-700 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap"
+            className="hidden sm:inline-flex text-xs font-semibold text-slate-700 hover:text-blue-700 px-3 py-2 rounded-xl hover:bg-slate-100 hover:scale-105 active:scale-95 transition-all duration-200 whitespace-nowrap"
           >
             Staff & Admin Login
           </button>
 
           <button
             onClick={onOpenSearch}
-            className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-medium text-xs sm:text-sm px-3.5 py-2 sm:px-4.5 sm:py-2.5 rounded-xl shadow-sm transition-all focus-visible:outline-2 focus-visible:outline-blue-600 whitespace-nowrap active:scale-98"
+            className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-medium text-xs sm:text-sm px-3.5 py-2 sm:px-4.5 sm:py-2.5 rounded-xl shadow-sm hover:shadow-lg hover:shadow-blue-600/30 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-600 whitespace-nowrap"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-4 h-4 transition-transform group-hover:rotate-12" />
             <span className="hidden xs:inline">Order School Books</span>
             <span className="xs:hidden">Order</span>
           </button>
