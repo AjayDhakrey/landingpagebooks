@@ -7,6 +7,12 @@ interface HowItWorks3DProps {
 
 export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const stepRef = useRef<number>(stepIndex);
+
+  // Keep stepRef in sync with prop for smooth RAF transitions
+  useEffect(() => {
+    stepRef.current = stepIndex;
+  }, [stepIndex]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -42,13 +48,13 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
     container.appendChild(renderer.domElement);
 
     // Lights
-    const amb = new THREE.AmbientLight(0xffffff, 0.9);
+    const amb = new THREE.AmbientLight(0xffffff, 0.95);
     scene.add(amb);
     const dir = new THREE.DirectionalLight(0xffffff, 1.4);
     dir.position.set(4, 6, 4);
     scene.add(dir);
 
-    const blueLight = new THREE.PointLight(0x3b82f6, 1.5, 8);
+    const blueLight = new THREE.PointLight(0x3b82f6, 1.6, 8);
     blueLight.position.set(-2, 2, 2);
     scene.add(blueLight);
 
@@ -154,16 +160,10 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
     trajectoryRing.position.y = -0.65;
     step2Group.add(trajectoryRing);
 
-    // -------------------------------------------------------------
-    // VISIBILITY STATE ACCORDING TO STEP
-    // -------------------------------------------------------------
-    const updateVisibility = (idx: number) => {
-      step0Group.visible = idx === 0;
-      step1Group.visible = idx === 1;
-      step2Group.visible = idx === 2;
-    };
-
-    updateVisibility(stepIndex);
+    // Initial scale states
+    step0Group.scale.setScalar(stepRef.current === 0 ? 1 : 0.001);
+    step1Group.scale.setScalar(stepRef.current === 1 ? 1 : 0.001);
+    step2Group.scale.setScalar(stepRef.current === 2 ? 1 : 0.001);
 
     // Animation Loop
     let clock = new THREE.Clock();
@@ -172,47 +172,58 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
     const animate = () => {
       animId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
+      const currentTarget = stepRef.current;
+
+      // Smooth scale interpolation between steps for transition
+      const lerpSpeed = 0.12;
+      step0Group.scale.lerp(new THREE.Vector3(currentTarget === 0 ? 1 : 0.0001, currentTarget === 0 ? 1 : 0.0001, currentTarget === 0 ? 1 : 0.0001), lerpSpeed);
+      step1Group.scale.lerp(new THREE.Vector3(currentTarget === 1 ? 1 : 0.0001, currentTarget === 1 ? 1 : 0.0001, currentTarget === 1 ? 1 : 0.0001), lerpSpeed);
+      step2Group.scale.lerp(new THREE.Vector3(currentTarget === 2 ? 1 : 0.0001, currentTarget === 2 ? 1 : 0.0001, currentTarget === 2 ? 1 : 0.0001), lerpSpeed);
+
+      step0Group.visible = step0Group.scale.x > 0.01;
+      step1Group.visible = step1Group.scale.x > 0.01;
+      step2Group.visible = step2Group.scale.x > 0.01;
 
       if (!prefersReducedMotion) {
-        if (stepIndex === 0) {
+        // Step 0 animation
+        if (step0Group.visible) {
           step0Group.rotation.y = elapsed * 0.4;
           step0Group.position.y = Math.sin(elapsed * 1.5) * 0.08;
-        } else if (stepIndex === 1) {
-          // Continuous 3D Book Stacking Cycle (4 second loop)
+        }
+
+        // Step 1 animation: continuous 3D book stacking & floating loop
+        if (step1Group.visible) {
           const stackCycle = elapsed % 4.0;
           step1Group.rotation.y = elapsed * 0.3;
 
           bookMeshes.forEach((b, i) => {
-            // Target stacked position
             const finalY = -0.5 + i * 0.16;
-            // Delay per book
             const startDelay = i * 0.35;
             const flyTime = Math.max(0, Math.min(1, (stackCycle - startDelay) / 0.6));
-            // Smooth ease out bounce
             const easeY = 1 - Math.pow(1 - flyTime, 3);
             
             if (stackCycle < 2.8) {
-              // Stacking in phase
               b.position.y = THREE.MathUtils.lerp(finalY + 1.2, finalY, easeY);
               b.position.x = THREE.MathUtils.lerp((i % 2 === 0 ? 0.8 : -0.8), 0, easeY);
               b.rotation.y = ((i % 2) - 0.5) * 0.08 + THREE.MathUtils.lerp(0.3, 0, easeY);
             } else {
-              // Floating ambient stack phase
               const floatOffset = Math.sin(elapsed * 2.5 + i * 0.5) * 0.03;
               b.position.y = finalY + floatOffset;
               b.position.x = 0;
             }
           });
 
-          // Ribbon expands and binds when stack completes
           if (stackCycle > 2.0) {
             const ribbonPop = Math.min(1, (stackCycle - 2.0) / 0.5);
-            ribbon.scale.setScalar(THREE.MathUtils.lerp(0.1, 1.0, ribbonPop));
+            ribbon.scale.setScalar(THREE.MathUtils.lerp(0.001, 1.0, ribbonPop));
             ribbon.position.y = -0.15 + Math.sin(elapsed * 2.5) * 0.03;
           } else {
-            ribbon.scale.setScalar(0.001);
+            ribbon.scale.setScalar(0.0001);
           }
-        } else if (stepIndex === 2) {
+        }
+
+        // Step 2 animation: box & GPS tracking
+        if (step2Group.visible) {
           step2Group.rotation.y = elapsed * 0.45;
           step2Group.position.y = Math.sin(elapsed * 2) * 0.1;
           trajectoryRing.rotation.z = elapsed * 0.8;
@@ -240,7 +251,7 @@ export const HowItWorks3D: React.FC<HowItWorks3DProps> = ({ stepIndex }) => {
         }
       });
     };
-  }, [stepIndex]);
+  }, []); // Run once on mount, sync smoothly via stepRef
 
   return (
     <div
