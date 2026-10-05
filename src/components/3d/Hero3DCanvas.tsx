@@ -699,21 +699,9 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ onExploreBundle }) =
         </div>
       </div>
 
-      {/* Floating Milestone Badges right side */}
-      <div className="absolute bottom-6 right-4 z-20 pointer-events-none hidden sm:flex flex-col gap-2">
-        <div className="backdrop-blur-md bg-white/80 border border-slate-200/80 shadow-md px-3 py-1.5 rounded-lg flex items-center gap-2 text-[11px] font-semibold text-slate-700">
-          <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
-          <span>Interactive 3D Journey Active</span>
-        </div>
-        <div className="backdrop-blur-md bg-slate-900/85 text-white border border-slate-700 shadow-md px-3 py-1.5 rounded-lg text-[10px] font-mono flex items-center justify-between">
-          <span>Loop: School → Books → Home</span>
-          <span className="text-emerald-400 font-bold ml-2">60 FPS</span>
-        </div>
-      </div>
-
       {/* Interactive stage timeline pills at bottom of canvas */}
-      <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-1.5 backdrop-blur-md bg-white/90 border border-slate-200/80 px-2 py-1 rounded-full shadow-sm">
+      <div className="absolute bottom-3 left-4 z-20 flex items-center pointer-events-none">
+        <div className="flex items-center gap-1.5 backdrop-blur-md bg-white/90 border border-slate-200/80 px-2.5 py-1 rounded-full shadow-sm">
           {[
             { id: 'school', label: '1. School' },
             { id: 'bundle', label: '2. Bundle' },
@@ -722,7 +710,7 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ onExploreBundle }) =
           ].map((s) => (
             <span
               key={s.id}
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-all ${
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all ${
                 activeStepText.stage === s.id
                   ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-500'
@@ -731,11 +719,6 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ onExploreBundle }) =
               {s.label}
             </span>
           ))}
-        </div>
-
-        <div className="hidden sm:flex items-center gap-1 backdrop-blur-md bg-slate-900/90 text-white px-2.5 py-1 rounded-full text-[10px] font-mono shadow-xs">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>60 FPS WebGL Engine</span>
         </div>
       </div>
     </div>
